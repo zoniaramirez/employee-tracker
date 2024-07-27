@@ -30,6 +30,26 @@ const addDepartment = async (name) => {
     console.log(`Added department: ${name}`);
 };
 
+
+async function getDepartments() {
+    const res = await client.query('SELECT id, name FROM department');
+    return res.rows;
+}
+
+async function getManagers() {
+    const res = await client.query(`
+        SELECT id, first_name, last_name 
+        FROM employee 
+        WHERE manager_id IS NULL
+    `);
+    return res.rows;
+}
+
+async function getRoles() {
+    const res = await client.query('SELECT id, title FROM role');
+    return res.rows;
+}
+
 const addRole = async (title, salary, department_id) => {
     await client.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [title, salary, department_id]);
     console.log(`Added role: ${title}`);
@@ -50,6 +70,9 @@ module.exports = {
     viewAllRoles,
     viewAllEmployees,
     addDepartment,
+    getDepartments,
+    getManagers,
+    getRoles,
     addRole,
     addEmployee,
     updateEmployeeRole
