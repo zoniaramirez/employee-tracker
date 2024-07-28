@@ -309,8 +309,8 @@ async function startApp() {
                 break;
 
             case 'Exit':
-                exit = true;
-                break;
+                console.log('Exiting the application...');
+                process.exit(0);
         }
     }
 }
