@@ -32,7 +32,6 @@ async function question() {
         }
     ]);
 }
-
 async function startApp() {
     let exit = false;
     while (!exit) {
@@ -146,7 +145,6 @@ async function startApp() {
                         choices: roleChoice
                     }
                 ]);
-                
                 await updateEmployeeRole(employeeId, newRoleId); // Update the employee's role in the database
                 break;
             case 'Exit':
