@@ -45,6 +45,11 @@ async function getManagers() {
     return res.rows;
 }
 
+async function getEmployees() {
+    const res = await client.query('SELECT id, first_name, last_name FROM employee');
+    return res.rows;
+}
+
 async function getRoles() {
     const res = await client.query('SELECT id, title FROM role');
     return res.rows;
@@ -60,9 +65,9 @@ const addEmployee = async (first_name, last_name, role_id, manager_id) => {
     console.log(`Added employee: ${first_name} ${last_name}`);
 };
 
-const updateEmployeeRole = async (employee_id, role_id) => {
-    await client.query('UPDATE employee SET role_id = $1 WHERE id = $2', [role_id, employee_id]);
-    console.log(`Updated employee role`);
+const updateEmployeeRole = async (employeeId, newRoleId) => {
+    await client.query('UPDATE employee SET role_id = $1 WHERE id = $2', [newRoleId, employeeId]);
+    console.log(`Updated employee ID ${employeeId} to new role ID ${newRoleId}`);
 };
 
 module.exports = {
@@ -73,6 +78,7 @@ module.exports = {
     getDepartments,
     getManagers,
     getRoles,
+    getEmployees,
     addRole,
     addEmployee,
     updateEmployeeRole

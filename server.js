@@ -9,6 +9,7 @@ const {
     addDepartment,
     getDepartments,
     getRoles,
+    getEmployees,
     getManagers,
 } = require('./queries');
 
