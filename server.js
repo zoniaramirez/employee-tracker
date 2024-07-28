@@ -1,4 +1,6 @@
-const inquirer = require('inquirer');
+const inquirer = require('inquirer');// Import the inquirer 
+
+// Import various functions from the queries module
 const {
     addRole,
     addEmployee,
@@ -21,6 +23,7 @@ const {
 } = require('./queries');
 
 async function question() {
+    // Prompt the user to select an action
     return inquirer.prompt([
         {
             type: 'list',
@@ -95,18 +98,19 @@ async function startApp() {
                 await addRole(title, salary, department_id);
                 break;
             case 'Add an employee':
+                // Fetch roles for the prompts
                 const roles = await getRoles();
                 const roleChoices = roles.map(role => ({
                     name: role.title,
                     value: role.id
                 }));
-
+                // Fetch managers for the prompts
                 const managers = await getManagers();
                 const managerChoices = managers.map(manager => ({
                     name: `${manager.first_name} ${manager.last_name}`,
                     value: manager.id
                 }));
-
+                // Prompt for employee details
                 const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
                     {
                         type: 'input',
@@ -131,7 +135,9 @@ async function startApp() {
                         choices: managerChoices
                     }
                 ]);
+                // Add the employee to the database
                 await addEmployee(firstName, lastName, roleId, managerId);
+                console.log('Employee added successfully');
                 break;
             case 'Update employee role':
                 const employees = await getEmployees(); // Fetch the list of employees
@@ -145,6 +151,7 @@ async function startApp() {
                     name: role.title,
                     value: role.id
                 }));
+                // Prompt for employee and new role
                 const { employeeId, newRoleId } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -163,6 +170,7 @@ async function startApp() {
                 console.log('Employee role updated successfully');
                 break;
             case 'Update Employee Manager':
+                // Fetch employees and managers for the prompts
                 const employeesForManagerUpdate = await getEmployees();
                 const employeeChoicesForManagerUpdate = employeesForManagerUpdate.map(employee => ({
                     name: `${employee.first_name} ${employee.last_name}`,
@@ -174,7 +182,7 @@ async function startApp() {
                     name: `${manager.first_name} ${manager.last_name}`,
                     value: manager.id
                 }));
-
+                 // Prompt for employee and new manager
                 const { employeeIdForManager, newManagerId } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -189,17 +197,19 @@ async function startApp() {
                         choices: managerChoicesForUpdate
                     }
                 ]);
+                // Update the employee's manager in the database
                 await updateEmployeeManager(employeeIdForManager, newManagerId);
                 console.log('Employee manager updated successfully');
                 break;
 
             case 'View Employees by Manager':
+                // Fetch managers for the prompt
                 const managersForView = await getManagers();
                 const managerChoicesForView = managersForView.map(manager => ({
                     name: `${manager.first_name} ${manager.last_name}`,
                     value: manager.id
                 }));
-
+                // Prompt for manager
                 const { managerIdForView } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -208,17 +218,19 @@ async function startApp() {
                         choices: managerChoicesForView
                     }
                 ]);
+                // Fetch and display employees by manager
                 const employeesByManager = await viewEmployeesByManager(managerIdForView);
                 console.table(employeesByManager);
                 break;
 
             case 'View Employees by Department':
+                // Fetch departments for the prompt
                 const departmentsForView = await getDepartments();
                 const departmentChoicesForView = departmentsForView.map(department => ({
                     name: department.name,
                     value: department.id
                 }));
-
+                // Prompt for department
                 const { departmentIdForView } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -227,17 +239,19 @@ async function startApp() {
                         choices: departmentChoicesForView
                     }
                 ]);
+                // Fetch and display employees by department
                 const employeesByDepartment = await viewEmployeesByDepartment(departmentIdForView);
                 console.table(employeesByDepartment);
                 break;
 
             case 'Delete Department':
+                // Fetch departments for the prompt
                 const departmentsForDelete = await getDepartments();
                 const departmentChoicesForDelete = departmentsForDelete.map(department => ({
                     name: department.name,
                     value: department.id
                 }));
-
+                // Prompt for department to delete
                 const { departmentIdForDelete } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -246,17 +260,19 @@ async function startApp() {
                         choices: departmentChoicesForDelete
                     }
                 ]);
+                // Delete the department from the database
                 await deleteDepartment(departmentIdForDelete);
                 console.log('Department deleted successfully');
                 break;
 
             case 'Delete Role':
+                // Fetch roles for the prompt
                 const rolesForDelete = await getRoles();
                 const roleChoicesForDelete = rolesForDelete.map(role => ({
                     name: role.title,
                     value: role.id
                 }));
-
+                // Prompt for role to delete
                 const { roleIdForDelete } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -265,17 +281,19 @@ async function startApp() {
                         choices: roleChoicesForDelete
                     }
                 ]);
+                // Delete the role from the database
                 await deleteRole(roleIdForDelete);
                 console.log('Role deleted successfully');
                 break;
 
             case 'Delete Employee':
+                // Fetch employees for the prompt
                 const employeesForDelete = await getEmployees();
                 const employeeChoicesForDelete = employeesForDelete.map(employee => ({
                     name: `${employee.first_name} ${employee.last_name}`,
                     value: employee.id
                 }));
-
+                // Prompt for employee to delete
                 const { employeeIdForDelete } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -284,18 +302,20 @@ async function startApp() {
                         choices: employeeChoicesForDelete
                     }
                 ]);
+                // Delete the employee from the database
                 await deleteEmployee(employeeIdForDelete);
                 console.log('Employee deleted successfully');
                 break;
 
 
             case 'View Department Budget':
+                // Fetch departments for the prompt
                 const departmentsForBudget = await getDepartments();
                 const departmentChoicesForBudget = departmentsForBudget.map(department => ({
                     name: department.name,
                     value: department.id
                 }));
-
+                // Prompt for department
                 const { departmentIdForBudget } = await inquirer.prompt([
                     {
                         type: 'list',
@@ -304,11 +324,13 @@ async function startApp() {
                         choices: departmentChoicesForBudget
                     }
                 ]);
+                // Fetch and display the total utilized budget for the department
                 const budget = await viewDepartmentBudget(departmentIdForBudget);
                 console.log(`Total utilized budget for department: ${budget}`);
                 break;
 
             case 'Exit':
+                // Exit the application
                 console.log('Exiting the application...');
                 process.exit(0);
         }
