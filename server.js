@@ -89,7 +89,7 @@ async function startApp() {
 
                 const managers = await getManagers();
                 const managerChoices = managers.map(manager => ({
-                    name: `${manager.firstName} ${manager.lastName}`,
+                    name: `${manager.first_name} ${manager.last_name}`,
                     value: manager.id
                 }));
 
@@ -120,19 +120,33 @@ async function startApp() {
                 await addEmployee(firstName, lastName, roleId, managerId);
                 break;
             case 'Update employee role':
+                const employees = await getEmployees(); // Fetch the list of employees
+                const employeeChoices = employees.map(employee => ({
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.id
+                }));
+
+                const role = await getRoles(); // Fetch the list of roles
+                const roleChoice = role.map(role => ({
+                    name: role.title,
+                    value: role.id
+                }));
                 const { employeeId, newRoleId } = await inquirer.prompt([
                     {
-                        type: 'input',
+                        type: 'list',
                         name: 'employeeId',
-                        message: 'Enter the employee\'s ID:'
+                        message: 'Select the employee to update:',
+                        choices: employeeChoices
                     },
                     {
-                        type: 'input',
+                        type: 'list',
                         name: 'newRoleId',
-                        message: 'Enter the new role ID:'
+                        message: 'Select the new role for the employee:',
+                        choices: roleChoice
                     }
                 ]);
-                await updateEmployeeRole(employeeId, newRoleId);
+                
+                await updateEmployeeRole(employeeId, newRoleId); // Update the employee's role in the database
                 break;
             case 'Exit':
                 exit = true;
